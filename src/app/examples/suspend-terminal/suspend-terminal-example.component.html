@@ -1,0 +1,13 @@
+<box [style]="{ flexDirection: 'column', borderStyle: 'round', paddingX: 1 }">
+    <text [bold]="true">suspendTerminal() demo</text>
+    <text>
+        Counter: <text color="green">{{ counter() }}</text>
+    </text>
+    <text [dimColor]="true">{{ status() }}</text>
+    <box [style]="{ marginTop: 1, flexDirection: 'column' }">
+        <text>e — open $EDITOR (defaults to vi)</text>
+        <text>r — run a shell read prompt</text>
+        <text>+ — increment the counter</text>
+        <text>q — quit</text>
+    </box>
+</box>

@@ -1,0 +1,62 @@
+<box [style]="{ flexDirection: 'column' }">
+    <text [bold]="true" [underline]="true"> Concurrent Suspense Demo </text>
+    <text [dimColor]="true"> (With concurrent: true, Suspense re-renders automatically) </text>
+    <box [style]="{ marginTop: 1 }" />
+
+    <text>Fast data (200ms):</text>
+    @if (fastData()) {
+        <ng-container *ngTemplateOutlet="dataItem; context: { data: fastData() }"></ng-container>
+    } @else {
+        <ng-container
+            *ngTemplateOutlet="loading; context: { message: 'Loading fast data...' }"
+        ></ng-container>
+    }
+
+    <box [style]="{ marginTop: 1 }" />
+
+    <text>Medium data (800ms):</text>
+    @if (mediumData()) {
+        <ng-container *ngTemplateOutlet="dataItem; context: { data: mediumData() }"></ng-container>
+    } @else {
+        <ng-container
+            *ngTemplateOutlet="loading; context: { message: 'Loading medium data...' }"
+        ></ng-container>
+    }
+
+    <box [style]="{ marginTop: 1 }" />
+
+    <text>Slow data (1500ms):</text>
+    @if (slowData()) {
+        <ng-container *ngTemplateOutlet="dataItem; context: { data: slowData() }"></ng-container>
+    } @else {
+        <ng-container
+            *ngTemplateOutlet="loading; context: { message: 'Loading slow data...' }"
+        ></ng-container>
+    }
+
+    @if (showMore()) {
+        <box [style]="{ marginTop: 1 }" />
+        <text>Dynamically added (500ms):</text>
+        @if (dynamicData()) {
+            <ng-container
+                *ngTemplateOutlet="dataItem; context: { data: dynamicData() }"
+            ></ng-container>
+        } @else {
+            <ng-container
+                *ngTemplateOutlet="loading; context: { message: 'Loading dynamic data...' }"
+            ></ng-container>
+        }
+    }
+
+    <ng-template #loading let-message="message">
+        <box [style]="{ marginLeft: 2 }">
+            <text color="yellow">{{ message }}</text>
+        </box>
+    </ng-template>
+
+    <ng-template #dataItem let-data="data">
+        <box [style]="{ marginLeft: 2 }">
+            <text color="green">{{ data }}</text>
+        </box>
+    </ng-template>
+</box>

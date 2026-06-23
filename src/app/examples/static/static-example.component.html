@@ -1,0 +1,11 @@
+<static [items]="tests()">
+    <ng-template #template let-test>
+        <box>
+            <text color="green">✔ {{ test.title }}</text>
+        </box>
+    </ng-template>
+</static>
+
+<box [style]="{ marginTop: 1 }">
+    <text [dimColor]="true">Completed tests: {{ tests().length }}</text>
+</box>

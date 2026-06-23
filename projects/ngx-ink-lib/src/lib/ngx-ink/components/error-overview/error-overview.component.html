@@ -1,0 +1,71 @@
+<box flexDirection="column" padding="1">
+    <box>
+        <text backgroundColor="red" color="white"> ERROR </text>
+
+        <text> {{ error().message }}</text>
+    </box>
+
+    @if (origin() && filePath()) {
+        <box marginTop="1">
+            <text [dimColor]="true">
+                {{ filePath() }}:{{ origin()?.line }}:{{ origin()?.column }}
+            </text>
+        </box>
+    }
+
+    @if (origin() && excerpt()) {
+        <box marginTop="1" flexDirection="column">
+            @for (item of excerpt(); track item.line) {
+                <box>
+                    <box [width]="lineWidth() + 1">
+                        <text
+                            [dimColor]="item.line !== origin()?.line"
+                            [backgroundColor]="item.line === origin()?.line ? 'red' : undefined"
+                            [color]="item.line === origin()?.line ? 'white' : undefined"
+                            [aria-label]="
+                                item.line === origin()?.line
+                                    ? `Line ${item.line}, error`
+                                    : `Line ${item.line}`
+                            "
+                        >
+                            {{ padLineNumber(item.line, lineWidth()) }}:
+                        </text>
+                    </box>
+
+                    <text
+                        [backgroundColor]="item.line === origin()?.line ? 'red' : undefined"
+                        [color]="item.line === origin()?.line ? 'white' : undefined"
+                    >
+                        {{ ' ' + item.value }}
+                    </text>
+                </box>
+            }
+        </box>
+    }
+
+    @if (error().stack) {
+        <box marginTop="1" flexDirection="column">
+            @for (line of error().stack!.split('\n').slice(1); track getStackKey(line)) {
+                <box>
+                    <text [dimColor]="true">- </text>
+                    @let parsedLine = parseStackLine(line);
+                    @if (!parsedLine?.file || !parsedLine.line || !parsedLine.column) {
+                        <text [dimColor]="true" [bold]="true"> {{ line }} \t{{ ' ' }} </text>
+                    } @else {
+                        <text [dimColor]="true" [bold]="true">
+                            {{ parsedLine.function }}
+                        </text>
+                        <text
+                            [dimColor]="true"
+                            color="gray"
+                            [aria-label]="`at ${cleanPath(parsedLine.file) ?? ''} line ${parsedLine.line} column ${parsedLine.column}`"
+                        >
+                            {{ cleanPath(parsedLine.file) ?? '' }}:{{ parsedLine.line }}:
+                            {{ parsedLine.column }}
+                        </text>
+                    }
+                </box>
+            }
+        </box>
+    }
+</box>

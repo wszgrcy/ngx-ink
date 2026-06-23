@@ -1,0 +1,9 @@
+@if (!(isScreenReaderEnabled() && ariaHidden())) {
+    <ink-box [style]="computedStyle()" [internal_accessibility]="internalAccessibility()">
+        @if (ariaLabel()) {
+            <text>{{ ariaLabel() }}</text>
+        } @else {
+            <ng-content />
+        }
+    </ink-box>
+}

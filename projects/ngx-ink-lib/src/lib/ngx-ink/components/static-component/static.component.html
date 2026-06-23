@@ -1,0 +1,7 @@
+<ink-box [style]="computedStyle()" [internal_static]="true">
+    @for (item of itemsToRender(); track $index; let itemIndex = $index) {
+        <ng-container
+            *ngTemplateOutlet="template()!; context: { $implicit: item, index: itemIndex }"
+        ></ng-container>
+    }
+</ink-box>

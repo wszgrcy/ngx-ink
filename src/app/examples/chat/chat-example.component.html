@@ -1,0 +1,11 @@
+<box [style]="{ flexDirection: 'column', padding: 1 }">
+    <box [style]="{ flexDirection: 'column' }">
+        @for (message of messages(); track message.id) {
+            <text>{{ message.text }}</text>
+        }
+    </box>
+
+    <box [style]="{ marginTop: 1 }">
+        <text>Enter your message: {{ input() }}</text>
+    </box>
+</box>

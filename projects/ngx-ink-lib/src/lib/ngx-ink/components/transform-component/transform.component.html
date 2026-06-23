@@ -1,0 +1,12 @@
+@if (hasChildren()) {
+    <text
+        [style]="{ flexGrow: 0, flexShrink: 1, flexDirection: 'row' }"
+        [internal_transform]="transform()"
+    >
+        @if (isScreenReaderEnabled() && accessibilityLabel()) {
+            {{ accessibilityLabel() }}
+        } @else {
+            <ng-content />
+        }
+    </text>
+}

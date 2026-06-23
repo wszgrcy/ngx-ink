@@ -1,0 +1,14 @@
+<box [style]="{ flexDirection: 'column' }" ariaRole="list">
+    <text>Select a color:</text>
+    @for (item of items(); track item; let index = $index) {
+        <box
+            aria-role="listitem"
+            [aria-state]="{ selected: index === selectedIndex() }"
+            [aria-label]="getScreenReaderLabel(index, item)"
+        >
+            <text [color]="index === selectedIndex() ? 'blue' : undefined">
+                {{ getItemLabel(index, item) }}
+            </text>
+        </box>
+    }
+</box>

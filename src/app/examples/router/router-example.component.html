@@ -1,0 +1,11 @@
+@if (currentRoute() === 'home') {
+    <box [style]="{ flexDirection: 'column' }">
+        <text [bold]="true" color="green">Home</text>
+        <text>Press Enter to go to About, or "q" to quit.</text>
+    </box>
+} @else {
+    <box [style]="{ flexDirection: 'column' }">
+        <text [bold]="true" color="blue">About</text>
+        <text>Press Enter to go back Home, or "q" to quit.</text>
+    </box>
+}

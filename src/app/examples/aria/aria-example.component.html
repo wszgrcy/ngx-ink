@@ -1,0 +1,14 @@
+<box [style]="{ flexDirection: 'column' }">
+    <text>
+        Press spacebar to toggle the checkbox. This example is best experienced with a screen
+        reader.
+    </text>
+    <box [style]="{ marginTop: 1 }">
+        <box aria-role="checkbox" [aria-state]="{ checked: isChecked() }">
+            <text>{{ isChecked() ? '[x]' : '[ ]' }}</text>
+        </box>
+    </box>
+    <box [style]="{ marginTop: 1 }">
+        <text [aria-hidden]="true">This text is hidden from screen readers.</text>
+    </box>
+</box>

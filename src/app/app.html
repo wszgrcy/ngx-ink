@@ -1,0 +1,16 @@
+@if (!activatedItem$()) {
+    <box [style]="{ flexWrap: 'wrap', rowGap: 4, columnGap: 1 }">
+        @for (item of items; track $index) {
+            @let isSelected = selectIndex$() === $index;
+            <text
+                [bold]="isSelected"
+                [italic]="isSelected"
+                [underline]="isSelected"
+                [backgroundColor]="isSelected ? 'green' : undefined"
+                >{{ item.name }}</text
+            >
+        }
+    </box>
+} @else {
+    <ng-container *ngComponentOutlet="activatedItem$()!.component"></ng-container>
+}

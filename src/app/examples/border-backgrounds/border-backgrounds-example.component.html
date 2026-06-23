@@ -1,0 +1,63 @@
+<box [style]="{ flexDirection: 'column', gap: 1 }">
+    <box
+        [style]="{
+            borderStyle: 'round',
+            borderColor: 'white',
+            borderBackgroundColor: 'blue',
+            padding: 1,
+        }"
+    >
+        <text>Box with blue background on white border</text>
+    </box>
+
+    <box
+        [style]="{
+            borderStyle: 'single',
+            borderColor: 'black',
+            borderBackgroundColor: 'yellow',
+            padding: 1,
+        }"
+    >
+        <text>Box with yellow background on black border</text>
+    </box>
+
+    <box
+        [style]="{
+            borderStyle: 'double',
+            borderTopColor: 'red',
+            borderTopBackgroundColor: 'green',
+            borderBottomColor: 'blue',
+            borderBottomBackgroundColor: 'yellow',
+            borderLeftColor: 'cyan',
+            borderLeftBackgroundColor: 'magenta',
+            borderRightColor: 'white',
+            borderRightBackgroundColor: 'red',
+            padding: 1,
+        }"
+    >
+        <text>Box with different colors per side</text>
+    </box>
+
+    <box
+        [style]="{
+            borderDimColor: true,
+            borderBackgroundColor: 'rgb(128, 0, 128)',
+            borderStyle: 'classic',
+            borderColor: 'white',
+            padding: 1,
+        }"
+    >
+        <text>Box with dimmed RGB purple background on border</text>
+    </box>
+
+    <box
+        [style]="{
+            borderStyle: 'bold',
+            borderColor: '#FF00FF',
+            borderBackgroundColor: '#00FF00',
+            padding: 1,
+        }"
+    >
+        <text>Box with hex color backgrounds</text>
+    </box>
+</box>

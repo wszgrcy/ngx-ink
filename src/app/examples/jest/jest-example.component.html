@@ -1,0 +1,22 @@
+<box [style]="{ flexDirection: 'column' }">
+    <static [items]="completedTests()">
+        <ng-template #template let-test>
+            <ink-test-item [status]="test.status" [path]="test.path" />
+        </ng-template>
+    </static>
+
+    @if (runningTests().length > 0) {
+        <box [style]="{ flexDirection: 'column', marginTop: 1 }">
+            @for (test of runningTests(); track test.path) {
+                <ink-test-item [status]="test.status" [path]="test.path" />
+            }
+        </box>
+    }
+
+    <ink-summary
+        [isFinished]="isFinished()"
+        [passed]="passedCount()"
+        [failed]="failedCount()"
+        [time]="elapsedTime()"
+    />
+</box>

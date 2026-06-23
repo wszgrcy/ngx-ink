@@ -1,0 +1,23 @@
+<box [style]="{ flexDirection: 'column', padding: 1 }">
+    <text [bold]="true"
+        >{{ '  ' }}
+        @for (char of titleChars(); track $index; let index = $index) {
+            <text [color]="getTitleColor(index)">{{ char }}</text>
+        }
+    </text>
+    <text></text>
+    <text>{{ '  ' }}{{ sparkleLine() }}</text>
+    <text
+        >{{ '  ' }}
+        @for (segment of segments(); track $index; let index = $index) {
+            <text [color]="segment.color">{{ segment.text }}</text>
+        }
+    </text>
+    <text>{{ '  ' }}{{ sparkleLineBottom() }}</text>
+    <text></text>
+    <text color="cyan">{{ '  ' }}{{ spinner() }} Loading more unicorns...</text>
+    <text></text>
+    <text [dimColor]="true"
+        >{{ '  ' }}Press {{ '<' }}space{{ '>' }} to {{ paused() ? 'resume' : 'pause' }}</text
+    >
+</box>

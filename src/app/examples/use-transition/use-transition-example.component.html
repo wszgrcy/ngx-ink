@@ -1,0 +1,28 @@
+<box [style]="{ flexDirection: 'column' }">
+    <text [bold]="true" [underline]="true">useTransition Demo</text>
+    <text [dimColor]="true">(Type to search - input stays responsive while list updates)</text>
+    <box [style]="{ marginTop: 1 }" />
+
+    <box>
+        <text>Search: </text>
+        <text color="cyan">{{ query() || '(type something)' }}</text>
+        @if (isPending()) {
+            <text color="yellow"> (updating...)</text>
+        }
+    </box>
+
+    <box [style]="{ flexDirection: 'column', marginTop: 1 }">
+        <text [bold]="true">{{ resultsTitle() }}</text>
+        @if (filteredItems().length === 0) {
+            <text [dimColor]="true"> No items found</text>
+        } @else {
+            @for (item of filteredItems(); track item) {
+                <text [dimColor]="isPending()">{{ item }}</text>
+            }
+        }
+    </box>
+
+    <box [style]="{ marginTop: 1 }">
+        <text [dimColor]="true">Press Ctrl+C to exit</text>
+    </box>
+</box>

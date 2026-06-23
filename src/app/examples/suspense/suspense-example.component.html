@@ -1,0 +1,9 @@
+@if (message()) {
+    <text>{{ message() }}</text>
+} @else {
+    <ng-container *ngTemplateOutlet="fallback"></ng-container>
+}
+
+<ng-template #fallback>
+    <text>Loading...</text>
+</ng-template>

@@ -1,0 +1,28 @@
+<box [style]="{ flexDirection: 'column', paddingY: 1 }">
+    <box [style]="{ justifyContent: 'center' }">
+        <text [bold]="true" [color]="titleColor()"> 🦄 Unicorn Snake 🦄 </text>
+    </box>
+
+    <box [style]="{ justifyContent: 'center', marginTop: 1 }">
+        <text [bold]="true" color="yellow"> Score: {{ game().score }} </text>
+    </box>
+
+    <box [style]="{ marginLeft: marginLeft(), marginTop: 1 }">
+        <text>{{ board() }}</text>
+    </box>
+
+    @if (game().gameOver) {
+        <box [style]="{ justifyContent: 'center', marginTop: 1 }">
+            <text [bold]="true" color="red">
+                {{ game().won ? 'You Win!' : 'Game Over!' }}
+            </text>
+            <text [dimColor]="true">r: restart | q: quit</text>
+        </box>
+    } @else {
+        <box [style]="{ justifyContent: 'center', marginTop: 1 }">
+            <text [dimColor]="true">
+                Arrow keys: move | Eat {{ getFoodCharacter() }} to grow | q: quit
+            </text>
+        </box>
+    }
+</box>

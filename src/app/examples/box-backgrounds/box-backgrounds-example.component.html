@@ -1,0 +1,111 @@
+<box [style]="{ flexDirection: 'column', gap: 1 }">
+    <text [bold]="true">Box Background Examples:</text>
+
+    <box>
+        <text>1. Standard red background (10x3):</text>
+    </box>
+    <box [style]="{ backgroundColor: 'red', width: 10, height: 3, alignSelf: 'flex-start' }">
+        <text>Hello</text>
+    </box>
+
+    <box>
+        <text>2. Blue background with border (12x4):</text>
+    </box>
+    <box
+        [style]="{
+            backgroundColor: 'blue',
+            borderStyle: 'round',
+            width: 12,
+            height: 4,
+            alignSelf: 'flex-start',
+        }"
+    >
+        <text>Border</text>
+    </box>
+
+    <box>
+        <text>3. Green background with padding (14x4):</text>
+    </box>
+    <box
+        [style]="{
+            backgroundColor: 'green',
+            padding: 1,
+            width: 14,
+            height: 4,
+            alignSelf: 'flex-start',
+        }"
+    >
+        <text>Padding</text>
+    </box>
+
+    <box>
+        <text>4. Yellow background with center alignment (16x3):</text>
+    </box>
+    <box
+        [style]="{
+            backgroundColor: 'yellow',
+            width: 16,
+            height: 3,
+            justifyContent: 'center',
+            alignSelf: 'flex-start',
+        }"
+    >
+        <text>Centered</text>
+    </box>
+
+    <box>
+        <text>5. Magenta background, column layout (12x5):</text>
+    </box>
+    <box
+        [style]="{
+            backgroundColor: 'magenta',
+            flexDirection: 'column',
+            width: 12,
+            height: 5,
+            alignSelf: 'flex-start',
+        }"
+    >
+        <text>Line 1</text>
+        <text>Line 2</text>
+    </box>
+
+    <box>
+        <text>6. Hex color background #FF8800 (10x3):</text>
+    </box>
+    <box [style]="{ backgroundColor: '#FF8800', width: 10, height: 3, alignSelf: 'flex-start' }">
+        <text>Hex</text>
+    </box>
+
+    <box>
+        <text>7. RGB background rgb(0,255,0) (10x3):</text>
+    </box>
+    <box
+        [style]="{ backgroundColor: 'rgb(0,255,0)', width: 10, height: 3, alignSelf: 'flex-start' }"
+    >
+        <text>RGB</text>
+    </box>
+
+    <box>
+        <text>8. Text inheritance test:</text>
+    </box>
+    <box [style]="{ backgroundColor: 'cyan', alignSelf: 'flex-start' }">
+        <text>Inherited </text>
+        <text backgroundColor="red">Override </text>
+        <text>Back to inherited</text>
+    </box>
+
+    <box>
+        <text>9. Nested background inheritance:</text>
+    </box>
+    <box [style]="{ backgroundColor: 'blue', alignSelf: 'flex-start' }">
+        <text>Outer: </text>
+        <box [style]="{ backgroundColor: 'yellow' }">
+            <text>Inner: </text>
+            <text backgroundColor="red">Deep</text>
+        </box>
+    </box>
+
+    <box [style]="{ marginTop: 1 }">
+        <text>Press Ctrl+C to exit</text>
+    </box>
+</box>

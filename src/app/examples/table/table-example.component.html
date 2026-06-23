@@ -1,0 +1,31 @@
+<box [style]="{ flexDirection: 'column', width: 80 }">
+    <box>
+        <box [style]="{ width: '10%' }">
+            <text>ID</text>
+        </box>
+
+        <box [style]="{ width: '50%' }">
+            <text>Name</text>
+        </box>
+
+        <box [style]="{ width: '40%' }">
+            <text>Email</text>
+        </box>
+    </box>
+
+    @for (user of users(); track user.id) {
+        <box>
+            <box [style]="{ width: '10%' }">
+                <text>{{ user.id }}</text>
+            </box>
+
+            <box [style]="{ width: '50%' }">
+                <text>{{ user.name }}</text>
+            </box>
+
+            <box [style]="{ width: '40%' }">
+                <text>{{ user.email }}</text>
+            </box>
+        </box>
+    }
+</box>

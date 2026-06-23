@@ -1,0 +1,14 @@
+<box [style]="{ flexDirection: 'column', paddingX: 2, paddingY: 1 }">
+    <text [bold]="true" [underline]="true"> Terminal dimensions: </text>
+
+    <box [style]="{ marginTop: 1 }">
+        <text>
+            Width: <text [bold]="true">{{ columns() }}</text>
+        </text>
+    </box>
+    <box>
+        <text>
+            Height: <text [bold]="true">{{ rows() }}</text>
+        </text>
+    </box>
+</box>

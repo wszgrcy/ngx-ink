@@ -1,0 +1,75 @@
+<box [style]="{ flexDirection: 'column', height: '100%' }">
+    <box borderStyle="round" borderColor="cyan" [style]="{ paddingX: 2, paddingY: 1 }">
+        <box [style]="{ flexDirection: 'column' }">
+            <text [bold]="true" color="cyan">
+                Incremental Rendering Demo - incrementalRendering=true
+            </text>
+            <text [dimColor]="true">
+                Use ↑/↓ arrows to navigate • Press q to quit • FPS: {{ fps() }}
+            </text>
+            <text>
+                Time: <text color="green">{{ timestamp() }}</text> • Updates:
+                <text color="yellow">{{ counter() }}</text> • Random:
+                <text color="cyan">{{ randomValue() }}</text>
+            </text>
+            <text>
+                Progress 1: <text color="green">{{ progressBar(progress1()) }}</text>
+                {{ progress1() }}%
+            </text>
+            <text>
+                Progress 2:
+                <text color="yellow">{{ progressBar(progress2()) }}</text>
+                {{ progress2() }}%
+            </text>
+            <text>
+                Progress 3: <text color="red">{{ progressBar(progress3()) }}</text>
+                {{ progress3() }}%
+            </text>
+        </box>
+    </box>
+
+    <box
+        [style]="{
+            paddingX: 2,
+            paddingY: 1,
+            marginTop: 1,
+            borderStyle: 'single',
+            borderColor: 'yellow',
+        }"
+    >
+        <box [style]="{ flexDirection: 'column' }">
+            <text [bold]="true" color="yellow"> Live Logs (only 1-2 lines update per frame): </text>
+            @for (line of logLines(); track line) {
+                <text color="green">{{ line }}</text>
+            }
+        </box>
+    </box>
+
+    <box
+        [style]="{
+            borderStyle: 'single',
+            borderColor: 'gray',
+            paddingX: 2,
+            paddingY: 1,
+            marginTop: 1,
+            flexGrow: 1,
+            flexDirection: 'column',
+        }"
+    >
+        <text [bold]="true" color="magenta">
+            System Services Monitor ({{ serviceCount() }} of {{ rows.length }} services):
+        </text>
+        @for (row of rows.slice(0, serviceCount()); track row; let index = $index) {
+            <text color="{{ index === selectedIndex() ? 'blue' : 'white' }}">
+                {{ index === selectedIndex() ? '> ' : '  ' }}{{ row }}
+            </text>
+        }
+    </box>
+
+    <box [style]="{ paddingX: 2, marginTop: 1, borderStyle: 'round', borderColor: 'magenta' }">
+        <text>
+            Selected:
+            <text [bold]="true" color="magenta">{{ selectedService() }}</text>
+        </text>
+    </box>
+</box>

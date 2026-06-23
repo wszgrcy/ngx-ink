@@ -1,0 +1,10 @@
+<box [style]="{ flexDirection: 'column', padding: 1 }">
+    <text [bold]="true" color="cyan"> Terminal Size </text>
+    <text>Columns: {{ columns() }}</text>
+    <text>Rows: {{ rows() }}</text>
+    <box [style]="{ marginTop: 1 }">
+        <text [dimColor]="true">
+            Resize your terminal to see the values update. Press Ctrl+C to exit.
+        </text>
+    </box>
+</box>
