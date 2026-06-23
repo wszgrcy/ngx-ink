@@ -1,7 +1,19 @@
 {
     "name": "@cyia/ngx-ink",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "description": "Ink for React — An Angular Implementation / Ink（React 终端 UI 框架）的 Angular 实现",
+    "keywords": [
+        "ink",
+        "angular",
+        "cli",
+        "stdout",
+        "components",
+        "command-line",
+        "print",
+        "render",
+        "colors",
+        "text"
+    ],
     "type": "module",
     "sideEffects": false,
     "repository": {

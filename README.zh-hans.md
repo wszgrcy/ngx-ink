@@ -6,6 +6,19 @@ Angular 终端 UI 框架。基于 [Ink](https://github.com/vadimdemedes/ink) 实
 
 > 当前同步到7.1.0
 
+## 快速启动模板
+
+最快的上手方式是使用 [ngx-ink-starter](https://github.com/wszgrcy/ngx-ink-starter) 模板。在 GitHub 上点击 **Use this template** 或直接克隆：
+
+```bash
+git clone https://github.com/wszgrcy/ngx-ink-starter.git
+cd ngx-ink-starter
+npm install
+npm start
+```
+
+无需任何构建配置，即可直接运行终端应用。
+
 ## 安装
 
 ```bash

@@ -6,6 +6,19 @@ An Angular Terminal UI Framework. Built on top of [Ink](https://github.com/vadim
 
 > Currently synced with version 7.1.0
 
+## Quick Start Template
+
+For the fastest way to get started, use the [ngx-ink-starter](https://github.com/wszgrcy/ngx-ink-starter) template. Click **Use this template** on GitHub or clone it directly — no build configuration needed, just:
+
+```bash
+git clone https://github.com/wszgrcy/ngx-ink-starter.git
+cd ngx-ink-starter
+npm install
+npm start
+```
+
+That's it — your terminal app is running.
+
 ## Installation
 
 ```bash
