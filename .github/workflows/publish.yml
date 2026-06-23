@@ -40,7 +40,7 @@ jobs:
               name: publish
               uses: JS-DevTools/npm-publish@v4
               with:
-                  package: ./dist/package.json
+                  package: ./dist/ngx-ink/package.json
                   provenance: true
                   access: public
             - if: steps.publish.outputs.old-version != steps.publish.outputs.version
