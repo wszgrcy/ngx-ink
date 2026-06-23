@@ -9,10 +9,16 @@ Angular 终端 UI 框架。基于 [Ink](https://github.com/vadimdemedes/ink) 实
 ## 安装
 
 ```bash
-npm install ngx-ink
+npm install @cyia/ngx-ink
 ```
 
 需要 `@angular/core ^22.0.0` 作为 peer dependency。
+
+> **前置依赖**：需要安装 `@types/node`，因为 `process.stdout/stdin/stderr` 在 TypeScript 编译时需要类型定义。
+
+```bash
+npm install @types/node --save-dev
+```
 
 ## 快速开始
 
@@ -40,7 +46,7 @@ npm install patch-package --save-dev
 
 #### 2. 创建补丁文件
 
-创建 `patches/@angular+build+22.0.1.patch`（根据实际安装的版本调整版本号）：
+创建 `patches/@angular+build+22.0.1.patch`：
 
 ```diff
 diff --git a/node_modules/@angular/build/src/builders/application/index.js b/node_modules/@angular/build/src/builders/application/index.js
@@ -69,9 +75,10 @@ index 6bee086..0a54ee8 100644
 
 **`script/patch/codePlugins.js`** — esbuild 插件配置：
 
+> 注意：`fast-glob` 仅在 `test` 模式下使用（用于构建测试入口）。如果不需要运行内部测试，可以移除 `fg` 相关的 `require` 和代码分支。
+
 ```javascript
 let path = require('path');
-let fg = require('fast-glob');
 /** @type {import('esbuild').Plugin} */
 const defaultPlugin = {
     name: 'raw-code',
@@ -142,6 +149,7 @@ globalThis.__dirname = path.dirname(__filename);
 | -------------------- | ------------------- | ---------------- |
 | `index`              | `false`             | 不需要 HTML 文件 |
 | `styles`             | `[]`                | 不需要 CSS 样式  |
+| `index.html`         | —                   | 如果存在请删除 `index.html`，CLI 应用不需要 |
 | `outputHashing`      | `"none"`            | 禁用文件名哈希   |
 | `outputPath.browser` | `""`                | 输出到当前目录   |
 | `outputPath.base`    | `"./dist/your-app"` | 基础输出路径     |
@@ -194,7 +202,7 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
     imports: [BoxComponent, TextComponent],
     template: `
         <box>
-            <text color="green">Hello, ngx-ink!</text>
+            <text [color]="'green'">Hello, ngx-ink!</text>
         </box>
     `,
 })
@@ -214,8 +222,8 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
     standalone: true,
     imports: [BoxComponent, TextComponent],
     template: `
-        <box [flexDirection]="'column'" [padding]="1">
-            <text color="cyan">Title</text>
+        <box [style]="{ flexDirection: 'column', padding: 1 }">
+            <text [color]="'cyan'">Title</text>
             <text>Content</text>
         </box>
     `,
@@ -223,19 +231,28 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-`<box>` 类似于浏览器中的 `<div style="display: flex">`，支持以下样式属性：
+`<box>` 类似于浏览器中的 `<div style="display: flex">`。**所有样式通过单个 `style` 输入绑定**，接受一个包含样式属性的对象：
 
-- `flexDirection`: `'row' | 'column'`
-- `flexGrow`, `flexShrink`, `basis`
-- `width`, `height`, `minWidth`, `minHeight`, `maxWidth`, `maxHeight`（数字或 `'100%'`）
-- `margin`, `marginTop`, `marginBottom`, `marginLeft`, `marginRight`, `marginX`, `marginY`
-- `padding`, `paddingTop`, `paddingBottom`, `paddingLeft`, `paddingRight`, `paddingX`, `paddingY`
-- `position`: `'static' | 'relative' | 'absolute'`
-- `top`, `right`, `bottom`, `left`
-- `overflow`: `'visible' | 'hidden'`
-- `textWrap`: `'wrap' | 'hard' | 'truncate' | 'truncate-end' | 'truncate-middle' | 'truncate-start'`
-- `gap`, `rowGap`, `columnGap`
-- ARIA 属性: `aria-label`, `aria-hidden`, `aria-role`, `aria-state`
+```html
+<box [style]="{ flexDirection: 'column', padding: 1, gap: 2 }"></box>
+```
+
+支持的样式属性（对应 `Styles` 类型）：
+
+| 类别      | 属性                                                                                                    |
+| --------- | ------------------------------------------------------------------------------------------------------- |
+| 布局方向  | `flexDirection`: `'row' \| 'column' \| 'row-reverse' \| 'column-reverse'`                               |
+| Flex 属性 | `flexGrow`, `flexShrink`, `flexBasis`, `flexWrap`                                                       |
+| 对齐      | `alignItems`, `alignSelf`, `alignContent`, `justifyContent`                                             |
+| 尺寸      | `width`, `height`, `minWidth`, `minHeight`, `maxWidth`, `maxHeight`（数字或 `'100%'` 等字符串）         |
+| 边距      | `margin`, `marginTop`, `marginBottom`, `marginLeft`, `marginRight`, `marginX`, `marginY`                |
+| 内边距    | `padding`, `paddingTop`, `paddingBottom`, `paddingLeft`, `paddingRight`, `paddingX`, `paddingY`         |
+| 定位      | `position`: `'static' \| 'relative' \| 'absolute'`，以及 `top`, `right`, `bottom`, `left`               |
+| 溢出      | `overflow`: `'visible' \| 'hidden'`，以及 `overflowX`, `overflowY`                                      |
+| 文本换行  | `textWrap`: `'wrap' \| 'hard' \| 'truncate' \| 'truncate-end' \| 'truncate-middle' \| 'truncate-start'` |
+| 间距      | `gap`, `rowGap`, `columnGap`                                                                            |
+| 边框      | `borderStyle`, `borderTop`, `borderBottom`, `borderLeft`, `borderRight`, `borderColor` 等               |
+| ARIA      | `aria-label`, `aria-hidden`, `aria-role`, `aria-state`                                                  |
 
 #### Text — 文本显示
 
@@ -249,8 +266,8 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
     imports: [BoxComponent, TextComponent],
     template: `
         <text
-            color="green"
-            backgroundColor="blue"
+            [color]="'green'"
+            [backgroundColor]="'blue'"
             [bold]="true"
             [italic]="true"
             [underline]="true"
@@ -265,17 +282,19 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-支持的颜色和样式属性：
+支持的颜色和样式属性（**所有属性均为 `input()` 类型，布尔值和字符串值需要使用 `[属性]="值"` 绑定**）：
 
-- `color`: 前景色（使用 Chalk，支持所有 ANSI 颜色名称）
-- `backgroundColor`: 背景色
-- `dimColor`: 降低亮度
-- `bold`: 粗体
-- `italic`: 斜体
-- `underline`: 下划线
-- `strikethrough`: 删除线
-- `inverse`: 反转前景/背景色
-- `wrap`: 文本换行或截断策略
+| 属性              | 类型                                                                                        | 说明                                         |
+| ----------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------- |
+| `color`           | `string`                                                                                    | 前景色（使用 Chalk，支持所有 ANSI 颜色名称） |
+| `backgroundColor` | `string`                                                                                    | 背景色                                       |
+| `dimColor`        | `boolean`                                                                                   | 降低亮度（需 `[dimColor]="true"`）           |
+| `bold`            | `boolean`                                                                                   | 粗体                                         |
+| `italic`          | `boolean`                                                                                   | 斜体                                         |
+| `underline`       | `boolean`                                                                                   | 下划线                                       |
+| `strikethrough`   | `boolean`                                                                                   | 删除线                                       |
+| `inverse`         | `boolean`                                                                                   | 反转前景/背景色                              |
+| `wrap`            | `'wrap' \| 'hard' \| 'truncate-end' \| 'truncate' \| 'truncate-middle' \| 'truncate-start'` | 文本换行或截断策略，默认 `'wrap'`            |
 
 #### Newline — 换行
 
@@ -303,7 +322,7 @@ import { BoxComponent, SpacerComponent, TextComponent } from '@cyia/ngx-ink';
     standalone: true,
     imports: [BoxComponent, SpacerComponent, TextComponent],
     template: `
-        <box [flexDirection]="'row'">
+        <box [style]="{ flexDirection: 'row' }">
             <text>Left</text>
             <spacer></spacer>
             <text>Right</text>

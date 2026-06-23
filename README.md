@@ -1,24 +1,30 @@
 # ngx-ink
 
-> **Language**: [中文](./README.zh-hans.md) | English
+> **Language**: English | [中文](./README.zh-hans.md)
 
-Angular Terminal UI Framework. Built on top of [Ink](https://github.com/vadimdemedes/ink), using Angular components to build CLI application user interfaces in the terminal.
+An Angular Terminal UI Framework. Built on top of [Ink](https://github.com/vadimdemedes/ink), it enables you to build CLI application UIs using Angular components in the terminal.
 
-> Currently synced to version 7.1.0
+> Currently synced with version 7.1.0
 
 ## Installation
 
 ```bash
-npm install ngx-ink
+npm install @cyia/ngx-ink
 ```
 
 Requires `@angular/core ^22.0.0` as a peer dependency.
+
+> **Prerequisite**: You need to install `@types/node` since `process.stdout/stdin/stderr` require type definitions during TypeScript compilation.
+
+```bash
+npm install @types/node --save-dev
+```
 
 ## Quick Start
 
 ### Integration Configuration
 
-Before using ngx-ink, you need to complete the following build configuration.
+Before using ngx-ink, you need to complete the following build configurations.
 
 #### 1. Install patch-package
 
@@ -40,7 +46,7 @@ Add a postinstall script in `package.json`:
 
 #### 2. Create Patch File
 
-Create `patches/@angular+build+22.0.1.patch` (adjust the version number according to your actual installed version):
+Create `patches/@angular+build+22.0.1.patch`:
 
 ```diff
 diff --git a/node_modules/@angular/build/src/builders/application/index.js b/node_modules/@angular/build/src/builders/application/index.js
@@ -69,9 +75,10 @@ Create the `script/patch/` directory and add the following two files:
 
 **`script/patch/codePlugins.js`** — esbuild plugin configuration:
 
+> Note: `fast-glob` is only used in `test` mode (for building test entry points). If you don't need to run internal tests, you can remove the `fg`-related `require` and code branch.
+
 ```javascript
 let path = require('path');
-let fg = require('fast-glob');
 /** @type {import('esbuild').Plugin} */
 const defaultPlugin = {
     name: 'raw-code',
@@ -103,7 +110,7 @@ globalThis.__filename = url.fileURLToPath(import.meta.url);
 globalThis.__dirname = path.dirname(__filename);
 ```
 
-> The `if (process.argv.includes('test'))` branch in `codePlugins.js` is only used for internal project testing and is not needed when users integrate.
+> The `if (process.argv.includes('test'))` branch in `codePlugins.js` is only used for internal project testing and is not needed when integrating.
 
 #### 4. Configure angular.json
 
@@ -138,13 +145,14 @@ globalThis.__dirname = path.dirname(__filename);
 }
 ```
 
-| Configuration        | Value               | Description                 |
-| -------------------- | ------------------- | --------------------------- |
-| `index`              | `false`             | No HTML file needed         |
-| `styles`             | `[]`                | No CSS styles needed        |
-| `outputHashing`      | `"none"`            | Disable filename hashing    |
-| `outputPath.browser` | `""`                | Output to current directory |
-| `outputPath.base`    | `"./dist/your-app"` | Base output path            |
+| Configuration      | Value                 | Description                    |
+| ------------------ | --------------------- | ------------------------------ |
+| `index`            | `false`               | No HTML file needed            |
+| `styles`           | `[]`                  | No CSS styles needed           |
+| `index.html`       | —                     | Delete `index.html` if it exists, not needed for CLI apps |
+| `outputHashing`    | `"none"`              | Disable filename hashing       |
+| `outputPath.browser` | `""`                | Output to current directory    |
+| `outputPath.base`  | `"./dist/your-app"`   | Base output path               |
 
 #### 5. Build and Run
 
@@ -153,12 +161,12 @@ npm run build
 node ./dist/your-app/main.mjs
 ```
 
-### Rendering the Application
+### Rendering Your App
 
-ngx-ink uses the standard Angular application startup method, identical to regular Angular web projects. Start the application using `bootstrapApplication` and configure terminal options with `InkOptionToken`.
+ngx-ink uses standard Angular application bootstrapping, just like regular Angular web projects. Start the app with `bootstrapApplication` and configure terminal options using `InkOptionToken`.
 
 ```typescript
-// main.ts — Application entry
+// main.ts — Application entry point
 import { App } from './app/app';
 import { bootstrapApplication, InkOption, InkOptionToken } from '@cyia/ngx-ink';
 
@@ -194,7 +202,7 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
     imports: [BoxComponent, TextComponent],
     template: `
         <box>
-            <text color="green">Hello, ngx-ink!</text>
+            <text [color]="'green'">Hello, ngx-ink!</text>
         </box>
     `,
 })
@@ -214,8 +222,8 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
     standalone: true,
     imports: [BoxComponent, TextComponent],
     template: `
-        <box [flexDirection]="'column'" [padding]="1">
-            <text color="cyan">Title</text>
+        <box [style]="{ flexDirection: 'column', padding: 1 }">
+            <text [color]="'cyan'">Title</text>
             <text>Content</text>
         </box>
     `,
@@ -223,19 +231,28 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-`<box>` is similar to `<div style="display: flex">` in browsers, supporting the following style properties:
+`<box>` is similar to `<div style="display: flex">` in the browser. **All styles are applied through a single `style` input binding** that accepts an object containing style properties:
 
-- `flexDirection`: `'row' | 'column'`
-- `flexGrow`, `flexShrink`, `basis`
-- `width`, `height`, `minWidth`, `minHeight`, `maxWidth`, `maxHeight` (number or `'100%'`)
-- `margin`, `marginTop`, `marginBottom`, `marginLeft`, `marginRight`, `marginX`, `marginY`
-- `padding`, `paddingTop`, `paddingBottom`, `paddingLeft`, `paddingRight`, `paddingX`, `paddingY`
-- `position`: `'static' | 'relative' | 'absolute'`
-- `top`, `right`, `bottom`, `left`
-- `overflow`: `'visible' | 'hidden'`
-- `textWrap`: `'wrap' | 'hard' | 'truncate' | 'truncate-end' | 'truncate-middle' | 'truncate-start'`
-- `gap`, `rowGap`, `columnGap`
-- ARIA attributes: `aria-label`, `aria-hidden`, `aria-role`, `aria-state`
+```html
+<box [style]="{ flexDirection: 'column', padding: 1, gap: 2 }"></box>
+```
+
+Supported style properties (corresponding to the `Styles` type):
+
+| Category   | Properties                                                                                                 |
+| ---------- | ---------------------------------------------------------------------------------------------------------- |
+| Flex Direction | `flexDirection`: `'row' \| 'column' \| 'row-reverse' \| 'column-reverse'`                              |
+| Flex Properties | `flexGrow`, `flexShrink`, `flexBasis`, `flexWrap`                                                       |
+| Alignment  | `alignItems`, `alignSelf`, `alignContent`, `justifyContent`                                                |
+| Dimensions | `width`, `height`, `minWidth`, `minHeight`, `maxWidth`, `maxHeight` (numbers or strings like `'100%'`)    |
+| Margin     | `margin`, `marginTop`, `marginBottom`, `marginLeft`, `marginRight`, `marginX`, `marginY`                  |
+| Padding    | `padding`, `paddingTop`, `paddingBottom`, `paddingLeft`, `paddingRight`, `paddingX`, `paddingY`            |
+| Position   | `position`: `'static' \| 'relative' \| 'absolute'`, plus `top`, `right`, `bottom`, `left`                  |
+| Overflow   | `overflow`: `'visible' \| 'hidden'`, plus `overflowX`, `overflowY`                                         |
+| Text Wrap  | `textWrap`: `'wrap' \| 'hard' \| 'truncate' \| 'truncate-end' \| 'truncate-middle' \| 'truncate-start'`   |
+| Spacing    | `gap`, `rowGap`, `columnGap`                                                                               |
+| Border     | `borderStyle`, `borderTop`, `borderBottom`, `borderLeft`, `borderRight`, `borderColor`, etc.               |
+| ARIA       | `aria-label`, `aria-hidden`, `aria-role`, `aria-state`                                                     |
 
 #### Text — Text Display
 
@@ -249,8 +266,8 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
     imports: [BoxComponent, TextComponent],
     template: `
         <text
-            color="green"
-            backgroundColor="blue"
+            [color]="'green'"
+            [backgroundColor]="'blue'"
             [bold]="true"
             [italic]="true"
             [underline]="true"
@@ -265,17 +282,19 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-Supported color and style properties:
+Supported color and style properties (**all properties are `input()` types; boolean and string values require `[property]="value"` binding**):
 
-- `color`: foreground color (uses Chalk, supports all ANSI color names)
-- `backgroundColor`: background color
-- `dimColor`: reduce brightness
-- `bold`: bold
-- `italic`: italic
-- `underline`: underline
-- `strikethrough`: strikethrough
-- `inverse`: invert foreground/background colors
-- `wrap`: text wrapping or truncation strategy
+| Property          | Type                                                                                        | Description                                                    |
+| ----------------- | ------------------------------------------------------------------------------------------- | -------------------------------------------------------------- |
+| `color`           | `string`                                                                                    | Foreground color (uses Chalk, supports all ANSI color names)   |
+| `backgroundColor` | `string`                                                                                    | Background color                                               |
+| `dimColor`        | `boolean`                                                                                   | Dim brightness (requires `[dimColor]="true"`)                  |
+| `bold`            | `boolean`                                                                                   | Bold                                                           |
+| `italic`          | `boolean`                                                                                   | Italic                                                         |
+| `underline`       | `boolean`                                                                                   | Underline                                                      |
+| `strikethrough`   | `boolean`                                                                                   | Strikethrough                                                  |
+| `inverse`         | `boolean`                                                                                   | Invert foreground/background colors                            |
+| `wrap`            | `'wrap' \| 'hard' \| 'truncate-end' \| 'truncate' \| 'truncate-middle' \| 'truncate-start'` | Text wrapping or truncation strategy, default `'wrap'`         |
 
 #### Newline — Line Break
 
@@ -303,7 +322,7 @@ import { BoxComponent, SpacerComponent, TextComponent } from '@cyia/ngx-ink';
     standalone: true,
     imports: [BoxComponent, SpacerComponent, TextComponent],
     template: `
-        <box [flexDirection]="'row'">
+        <box [style]="{ flexDirection: 'row' }">
             <text>Left</text>
             <spacer></spacer>
             <text>Right</text>
@@ -335,7 +354,7 @@ import { StaticComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-Suitable for unchanging output, such as logs, completed task lists, etc.
+Useful for unchanging output such as logs, completed task lists, etc.
 
 #### Transform — Text Transformation
 
@@ -390,7 +409,7 @@ export class InputComponent {
 }
 ```
 
-The returned `key` object contains: `upArrow`, `downArrow`, `leftArrow`, `rightArrow`, `pageDown`, `pageUp`, `home`, `end`, `return`, `escape`, `ctrl`, `shift`, `tab`, `backspace`, `delete`, `alt`, `f1`-`f19`, `space`, `enter`, `slash`, `dot`, `comma`, as well as the raw character of the key pressed.
+The returned `key` object includes: `upArrow`, `downArrow`, `leftArrow`, `rightArrow`, `pageDown`, `pageUp`, `home`, `end`, `return`, `escape`, `ctrl`, `shift`, `tab`, `backspace`, `delete`, `alt`, `f1`-`f19`, `space`, `enter`, `slash`, `dot`, `comma`, as well as the raw character of the key pressed.
 
 #### useWindowSize — Window Size
 
@@ -429,7 +448,7 @@ export class SpinnerComponent {
 
 Returns:
 
-- `frame`: counter incremented every interval
+- `frame`: counter that increments every interval
 - `time`: total milliseconds since start
 - `delta`: milliseconds since the last frame
 - `reset()`: reset all values
@@ -497,9 +516,9 @@ export class StreamComponent {
 Injectable via Angular's `inject`:
 
 - `APP_CONTEXT_TOKEN` — Application context
-- `STDIN_CONTEXT_TOKEN` — stdin context
-- `STDOUT_CONTEXT_TOKEN` — stdout context
-- `STDERR_CONTEXT_TOKEN` — stderr context
+- `STDIN_CONTEXT_TOKEN` — Stdin context
+- `STDOUT_CONTEXT_TOKEN` — Stdout context
+- `STDERR_CONTEXT_TOKEN` — Stderr context
 - `FOCUS_CONTEXT_TOKEN` — Focus context
 - `CURSOR_CONTEXT_TOKEN` — Cursor context
 - `ANIMATION_CONTEXT_TOKEN` — Animation context
@@ -510,50 +529,50 @@ Injectable via Angular's `inject`:
 
 ### Core
 
-| Export                    | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `render`                  | Render application to terminal, returns `RenderResult` |
-| `TerminalRenderer`        | Terminal renderer                                      |
-| `TerminalRendererFactory` | Renderer factory                                       |
+| Export                      | Description                                    |
+| ------------------------- | ---------------------------------------------- |
+| `render`                  | Render app to terminal, returns `RenderResult` |
+| `TerminalRenderer`        | Terminal renderer                              |
+| `TerminalRendererFactory` | Renderer factory                               |
 
 ### Components
 
-| Component                | Description                       |
-| ------------------------ | --------------------------------- |
-| `BoxComponent`           | Flexbox layout container          |
-| `TextComponent`          | Text display with styling support |
-| `NewlineComponent`       | Line break                        |
-| `SpacerComponent`        | Flexible space                    |
-| `StaticComponent`        | Static content rendering          |
-| `TransformComponent`     | Text transformation               |
-| `ErrorOverviewComponent` | Error message display             |
+| Component                  | Description                |
+| -------------------------- | -------------------------- |
+| `BoxComponent`             | Flexbox layout container   |
+| `TextComponent`            | Text display with styling  |
+| `NewlineComponent`         | Line break                 |
+| `SpacerComponent`          | Flexible space             |
+| `StaticComponent`          | Static content rendering   |
+| `TransformComponent`       | Text transformation        |
+| `ErrorOverviewComponent`   | Error message display      |
 
 ### Hooks
 
-| Hook                       | Return Type                  | Description              |
-| -------------------------- | ---------------------------- | ------------------------ |
-| `useInput`                 | `void`                       | Listen to keyboard input |
-| `useWindowSize`            | `Signal<WindowSize>`         | Terminal window size     |
-| `useAnimation`             | `Signal<AnimationResult>`    | Animation driver         |
-| `useFocus`                 | `Signal<FocusResult>`        | Focus state and control  |
-| `useFocusManager`          | `void`                       | Focus manager            |
-| `useCursor`                | `{ setCursorPosition }`      | Cursor position control  |
-| `useStdin`                 | `Signal<StdinContextValue>`  | stdin access             |
-| `useStdinContext`          | `Signal<StdinContextValue>`  | stdin context            |
-| `useStdout`                | `Signal<StdoutContextValue>` | stdout access            |
-| `useStderr`                | `Signal<StderrContextValue>` | stderr access            |
-| `useApp`                   | `Signal<AppContextValue>`    | Application context      |
-| `usePaste`                 | `void`                       | Paste event              |
-| `useIsScreenReaderEnabled` | `boolean`                    | Screen reader detection  |
-| `useBoxMetrics`            | `Signal<BoxMetrics>`         | Box size information     |
+| Hook                       | Return Type                  | Description                    |
+| -------------------------- | ---------------------------- | ------------------------------ |
+| `useInput`                 | `void`                       | Listen to keyboard input       |
+| `useWindowSize`            | `Signal<WindowSize>`         | Terminal window size           |
+| `useAnimation`             | `Signal<AnimationResult>`    | Animation driver               |
+| `useFocus`                 | `Signal<FocusResult>`        | Focus state and control        |
+| `useFocusManager`          | `void`                       | Focus manager                  |
+| `useCursor`                | `{ setCursorPosition }`      | Cursor position control        |
+| `useStdin`                 | `Signal<StdinContextValue>`  | Stdin access                   |
+| `useStdinContext`          | `Signal<StdinContextValue>`  | Stdin context                  |
+| `useStdout`                | `Signal<StdoutContextValue>` | Stdout access                  |
+| `useStderr`                | `Signal<StderrContextValue>` | Stderr access                  |
+| `useApp`                   | `Signal<AppContextValue>`    | Application context            |
+| `usePaste`                 | `void`                       | Paste event                    |
+| `useIsScreenReaderEnabled` | `boolean`                    | Screen reader detection        |
+| `useBoxMetrics`            | `Signal<BoxMetrics>`         | Box size information           |
 
 ### Utilities
 
-| Export                         | Description                     |
-| ------------------------------ | ------------------------------- |
-| `colorize`                     | ANSI color processing           |
-| `sanitizeAnsi`                 | Clean ANSI escape sequences     |
-| `kittyFlags`, `kittyModifiers` | Kitty keyboard protocol support |
+| Export                           | Description                  |
+| -------------------------------- | ---------------------------- |
+| `colorize`                       | ANSI color handling          |
+| `sanitizeAnsi`                   | Sanitize ANSI escape sequences |
+| `kittyFlags`, `kittyModifiers`   | Kitty keyboard protocol support |
 
 ## Differences from Ink
 
@@ -562,7 +581,7 @@ ngx-ink reuses Ink's core logic (ANSI processing, Yoga layout calculation, rende
 - Uses Angular components (`@Component`) instead of React function components
 - Uses `input()` / `output()` instead of props
 - Uses Angular Signals for state management
-- Standard Angular application startup method (`bootstrapApplication`)
+- Standard Angular application bootstrapping (`bootstrapApplication`)
 
 ## Project Structure
 
@@ -574,11 +593,10 @@ projects/ngx-ink-lib/
 │   │   ├── contexts/         # Angular context Token definitions
 │   │   ├── hooks/            # useInput, useWindowSize, useAnimation, etc.
 │   │   ├── service/          # AppContextService and other services
-│   │   ├── render.ts         # Rendering entry
+│   │   ├── render.ts         # Rendering entry point
 │   │   ├── renderer2.ts      # Renderer implementation
 │   │   ├── application.ts    # Angular application startup
-│   │   ├── platform.ts       # Platform provider
+│   │   ├── platform.ts       # Platform providers
 │   │   └── ...              # Core utility functions
 │   └── public-api.ts        # Public API exports
-└── package.json
 ```
