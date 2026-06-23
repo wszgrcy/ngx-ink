@@ -4,6 +4,13 @@
     "description": "Ink for React — An Angular Implementation / Ink（React 终端 UI 框架）的 Angular 实现",
     "type": "module",
     "sideEffects": false,
+    "repository": {
+        "url": "https://github.com/wszgrcy/ngx-ink"
+    },
+    "author": {
+        "email": "wszgrcy@gmail.com",
+        "name": "wszgrcy"
+    },
     "peerDependencies": {
         "@angular/compiler": "^22.0.0",
         "@angular/core": "^22.0.0"
@@ -32,5 +39,9 @@
         "widest-line": "^6.0.0",
         "wrap-ansi": "^10.0.0",
         "yoga-layout": "^3.2.1"
+    },
+    "publishConfig": {
+        "access": "public",
+        "registry": "https://registry.npmjs.org"
     }
 }

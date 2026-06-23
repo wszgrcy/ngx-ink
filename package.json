@@ -5,7 +5,7 @@
         "ng": "ng",
         "start": "ng serve",
         "build": "ng build --configuration development",
-        "build:lib": "ng build ngx-ink-lib && cpx ./README.md ./dist/ngx-ink",
+        "build:lib": "ng build ngx-ink-lib && cpx ./README.*md ./dist/ngx-ink",
         "watch": "ng build --watch --configuration development",
         "test": "npm run build && node ./dist/ngx-ink/main.mjs",
         "test:lib": "ng build --configuration test && mocha \"./dist/**/*.spec.mjs\" --enable-source-maps --inspect",
