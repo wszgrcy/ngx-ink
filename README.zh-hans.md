@@ -1,34 +1,34 @@
 # ngx-ink
 
-> **Language**: [中文](./README.zh-hans.md) | English
+> **语言**: [English](./README.md) | 中文
 
-Angular Terminal UI Framework. Built on top of [Ink](https://github.com/vadimdemedes/ink), using Angular components to build CLI application user interfaces in the terminal.
+Angular 终端 UI 框架。基于 [Ink](https://github.com/vadimdemedes/ink) 实现，使用 Angular 组件在终端中构建 CLI 应用的用户界面。
 
-> Currently synced to version 7.1.0
+> 当前同步到7.1.0
 
-## Installation
+## 安装
 
 ```bash
 npm install ngx-ink
 ```
 
-Requires `@angular/core ^22.0.0` as a peer dependency.
+需要 `@angular/core ^22.0.0` 作为 peer dependency。
 
-## Quick Start
+## 快速开始
 
-### Integration Configuration
+### 集成配置
 
-Before using ngx-ink, you need to complete the following build configuration.
+在使用 ngx-ink 之前，需要完成以下构建配置。
 
-#### 1. Install patch-package
+#### 1. 安装 patch-package
 
-This project requires modifying the behavior of `@angular/build` to support ES Module output:
+本项目需要修改 `@angular/build` 的行为以支持 ES Module 输出：
 
 ```bash
 npm install patch-package --save-dev
 ```
 
-Add a postinstall script in `package.json`:
+在 `package.json` 中添加 postinstall 脚本：
 
 ```json
 {
@@ -38,9 +38,9 @@ Add a postinstall script in `package.json`:
 }
 ```
 
-#### 2. Create Patch File
+#### 2. 创建补丁文件
 
-Create `patches/@angular+build+22.0.1.patch` (adjust the version number according to your actual installed version):
+创建 `patches/@angular+build+22.0.1.patch`（根据实际安装的版本调整版本号）：
 
 ```diff
 diff --git a/node_modules/@angular/build/src/builders/application/index.js b/node_modules/@angular/build/src/builders/application/index.js
@@ -63,11 +63,11 @@ index 6bee086..0a54ee8 100644
      (0, version_1.assertCompatibleAngularVersion)(workspaceRoot);
 ```
 
-#### 3. Create Build Scripts
+#### 3. 创建构建脚本
 
-Create the `script/patch/` directory and add the following two files:
+创建 `script/patch/` 目录，添加以下两个文件：
 
-**`script/patch/codePlugins.js`** — esbuild plugin configuration:
+**`script/patch/codePlugins.js`** — esbuild 插件配置：
 
 ```javascript
 let path = require('path');
@@ -91,7 +91,7 @@ const defaultPlugin = {
 exports.default = [defaultPlugin];
 ```
 
-**`script/patch/cjs-shim.js`** — CommonJS compatibility shim:
+**`script/patch/cjs-shim.js`** — CommonJS 兼容性 shim：
 
 ```javascript
 import { createRequire } from 'node:module';
@@ -103,9 +103,9 @@ globalThis.__filename = url.fileURLToPath(import.meta.url);
 globalThis.__dirname = path.dirname(__filename);
 ```
 
-> The `if (process.argv.includes('test'))` branch in `codePlugins.js` is only used for internal project testing and is not needed when users integrate.
+> `codePlugins.js` 中的 `if (process.argv.includes('test'))` 分支仅用于项目内部测试，用户集成时不需要。
 
-#### 4. Configure angular.json
+#### 4. 配置 angular.json
 
 ```json
 {
@@ -138,27 +138,27 @@ globalThis.__dirname = path.dirname(__filename);
 }
 ```
 
-| Configuration        | Value               | Description                 |
-| -------------------- | ------------------- | --------------------------- |
-| `index`              | `false`             | No HTML file needed         |
-| `styles`             | `[]`                | No CSS styles needed        |
-| `outputHashing`      | `"none"`            | Disable filename hashing    |
-| `outputPath.browser` | `""`                | Output to current directory |
-| `outputPath.base`    | `"./dist/your-app"` | Base output path            |
+| 配置项               | 值                  | 说明             |
+| -------------------- | ------------------- | ---------------- |
+| `index`              | `false`             | 不需要 HTML 文件 |
+| `styles`             | `[]`                | 不需要 CSS 样式  |
+| `outputHashing`      | `"none"`            | 禁用文件名哈希   |
+| `outputPath.browser` | `""`                | 输出到当前目录   |
+| `outputPath.base`    | `"./dist/your-app"` | 基础输出路径     |
 
-#### 5. Build and Run
+#### 5. 构建和运行
 
 ```bash
 npm run build
 node ./dist/your-app/main.mjs
 ```
 
-### Rendering the Application
+### 渲染应用
 
-ngx-ink uses the standard Angular application startup method, identical to regular Angular web projects. Start the application using `bootstrapApplication` and configure terminal options with `InkOptionToken`.
+ngx-ink 使用标准的 Angular 应用启动方式，与常规 Angular Web 项目无异。通过 `bootstrapApplication` 启动应用，并使用 `InkOptionToken` 配置终端选项。
 
 ```typescript
-// main.ts — Application entry
+// main.ts — 应用入口
 import { App } from './app/app';
 import { bootstrapApplication, InkOption, InkOptionToken } from '@cyia/ngx-ink';
 
@@ -184,7 +184,7 @@ bootstrapApplication(App, {
 ```
 
 ```typescript
-// app.ts — Root component
+// app.ts — 根组件
 import { Component } from '@angular/core';
 import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
 
@@ -201,9 +201,9 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
 export class AppComponent {}
 ```
 
-### Using Built-in Components
+### 使用内置组件
 
-#### Box — Flexbox Layout
+#### Box — 弹性盒子布局
 
 ```typescript
 import { Component } from '@angular/core';
@@ -223,11 +223,11 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-`<box>` is similar to `<div style="display: flex">` in browsers, supporting the following style properties:
+`<box>` 类似于浏览器中的 `<div style="display: flex">`，支持以下样式属性：
 
 - `flexDirection`: `'row' | 'column'`
 - `flexGrow`, `flexShrink`, `basis`
-- `width`, `height`, `minWidth`, `minHeight`, `maxWidth`, `maxHeight` (number or `'100%'`)
+- `width`, `height`, `minWidth`, `minHeight`, `maxWidth`, `maxHeight`（数字或 `'100%'`）
 - `margin`, `marginTop`, `marginBottom`, `marginLeft`, `marginRight`, `marginX`, `marginY`
 - `padding`, `paddingTop`, `paddingBottom`, `paddingLeft`, `paddingRight`, `paddingX`, `paddingY`
 - `position`: `'static' | 'relative' | 'absolute'`
@@ -235,9 +235,9 @@ export class MyAppComponent {}
 - `overflow`: `'visible' | 'hidden'`
 - `textWrap`: `'wrap' | 'hard' | 'truncate' | 'truncate-end' | 'truncate-middle' | 'truncate-start'`
 - `gap`, `rowGap`, `columnGap`
-- ARIA attributes: `aria-label`, `aria-hidden`, `aria-role`, `aria-state`
+- ARIA 属性: `aria-label`, `aria-hidden`, `aria-role`, `aria-state`
 
-#### Text — Text Display
+#### Text — 文本显示
 
 ```typescript
 import { Component } from '@angular/core';
@@ -265,19 +265,19 @@ import { BoxComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-Supported color and style properties:
+支持的颜色和样式属性：
 
-- `color`: foreground color (uses Chalk, supports all ANSI color names)
-- `backgroundColor`: background color
-- `dimColor`: reduce brightness
-- `bold`: bold
-- `italic`: italic
-- `underline`: underline
-- `strikethrough`: strikethrough
-- `inverse`: invert foreground/background colors
-- `wrap`: text wrapping or truncation strategy
+- `color`: 前景色（使用 Chalk，支持所有 ANSI 颜色名称）
+- `backgroundColor`: 背景色
+- `dimColor`: 降低亮度
+- `bold`: 粗体
+- `italic`: 斜体
+- `underline`: 下划线
+- `strikethrough`: 删除线
+- `inverse`: 反转前景/背景色
+- `wrap`: 文本换行或截断策略
 
-#### Newline — Line Break
+#### Newline — 换行
 
 ```typescript
 import { Component } from '@angular/core';
@@ -292,7 +292,7 @@ import { NewlineComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-#### Spacer — Flexible Space
+#### Spacer — 弹性空白
 
 ```typescript
 import { Component } from '@angular/core';
@@ -313,7 +313,7 @@ import { BoxComponent, SpacerComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-#### Static — Static Content
+#### Static — 静态内容
 
 ```typescript
 import { Component } from '@angular/core';
@@ -335,9 +335,9 @@ import { StaticComponent, TextComponent } from '@cyia/ngx-ink';
 export class MyAppComponent {}
 ```
 
-Suitable for unchanging output, such as logs, completed task lists, etc.
+适用于不改变的输出，如日志、已完成的任务列表等。
 
-#### Transform — Text Transformation
+#### Transform — 文本变换
 
 ```typescript
 import { Component } from '@angular/core';
@@ -360,11 +360,11 @@ export class MyAppComponent {
 }
 ```
 
-Transform the string representation of child components before outputting to the terminal.
+在输出到终端前转换子组件的字符串表示。
 
-### Using Hooks
+### 使用 Hooks
 
-#### useInput — Keyboard Input
+#### useInput — 键盘输入
 
 ```typescript
 import { Component } from '@angular/core';
@@ -377,22 +377,22 @@ export class InputComponent {
     constructor() {
         useInput((input, key) => {
             if (key.return) {
-                // Enter key
+                // 回车键
             }
             if (key.upArrow) {
-                // Up arrow
+                // 上箭头
             }
             if (input === 'q') {
-                // Press Q to exit
+                // 按 Q 退出
             }
         });
     }
 }
 ```
 
-The returned `key` object contains: `upArrow`, `downArrow`, `leftArrow`, `rightArrow`, `pageDown`, `pageUp`, `home`, `end`, `return`, `escape`, `ctrl`, `shift`, `tab`, `backspace`, `delete`, `alt`, `f1`-`f19`, `space`, `enter`, `slash`, `dot`, `comma`, as well as the raw character of the key pressed.
+返回的 `key` 对象包含：`upArrow`, `downArrow`, `leftArrow`, `rightArrow`, `pageDown`, `pageUp`, `home`, `end`, `return`, `escape`, `ctrl`, `shift`, `tab`, `backspace`, `delete`, `alt`, `f1`-`f19`, `space`, `enter`, `slash`, `dot`, `comma`，以及按键的原始字符。
 
-#### useWindowSize — Window Size
+#### useWindowSize — 窗口大小
 
 ```typescript
 import { Component } from '@angular/core';
@@ -406,9 +406,9 @@ export class WindowSizeComponent {
 }
 ```
 
-Automatically updates when the terminal is resized.
+终端调整大小时自动更新。
 
-#### useAnimation — Animation
+#### useAnimation — 动画
 
 ```typescript
 import { Component } from '@angular/core';
@@ -427,14 +427,14 @@ export class SpinnerComponent {
 }
 ```
 
-Returns:
+返回：
 
-- `frame`: counter incremented every interval
-- `time`: total milliseconds since start
-- `delta`: milliseconds since the last frame
-- `reset()`: reset all values
+- `frame`: 每 interval 递增的计数器
+- `time`: 自开始以来的总毫秒数
+- `delta`: 上一帧以来的毫秒数
+- `reset()`: 重置所有值
 
-#### useFocus — Focus Management
+#### useFocus — 焦点管理
 
 ```typescript
 import { Component } from '@angular/core';
@@ -451,9 +451,9 @@ export class FocusItemComponent {
 }
 ```
 
-Switch focus between components using the Tab key.
+使用 Tab 键在组件间切换焦点。
 
-#### useCursor — Cursor Control
+#### useCursor — 光标控制
 
 ```typescript
 import { Component } from '@angular/core';
@@ -469,7 +469,7 @@ export class CursorComponent {
 }
 ```
 
-#### useStdin / useStdout / useStderr — Stream Access
+#### useStdin / useStdout / useStderr — 流访问
 
 ```typescript
 import { useStdin, useStdout } from '@cyia/ngx-ink';
@@ -484,101 +484,101 @@ export class StreamComponent {
 }
 ```
 
-#### Other Hooks
+#### 其他 Hooks
 
-- `useApp` — Application context
-- `useFocusManager` — Focus manager
-- `usePaste` — Paste event listener
-- `useIsScreenReaderEnabled` — Detect screen reader
-- `useBoxMetrics` — Get Box size information
+- `useApp` — 应用上下文
+- `useFocusManager` — 焦点管理器
+- `usePaste` — 粘贴事件监听
+- `useIsScreenReaderEnabled` — 检测屏幕阅读器
+- `useBoxMetrics` — 获取 Box 尺寸信息
 
 ## Context Tokens
 
-Injectable via Angular's `inject`:
+可通过 Angular 的 `inject` 注入：
 
-- `APP_CONTEXT_TOKEN` — Application context
-- `STDIN_CONTEXT_TOKEN` — stdin context
-- `STDOUT_CONTEXT_TOKEN` — stdout context
-- `STDERR_CONTEXT_TOKEN` — stderr context
-- `FOCUS_CONTEXT_TOKEN` — Focus context
-- `CURSOR_CONTEXT_TOKEN` — Cursor context
-- `ANIMATION_CONTEXT_TOKEN` — Animation context
-- `ACCESSIBILITY_CONTEXT_TOKEN` — Accessibility context
-- `BACKGROUND_CONTEXT_TOKEN` — Background color context
+- `APP_CONTEXT_TOKEN` — 应用上下文
+- `STDIN_CONTEXT_TOKEN` — stdin 上下文
+- `STDOUT_CONTEXT_TOKEN` — stdout 上下文
+- `STDERR_CONTEXT_TOKEN` — stderr 上下文
+- `FOCUS_CONTEXT_TOKEN` — 焦点上下文
+- `CURSOR_CONTEXT_TOKEN` — 光标上下文
+- `ANIMATION_CONTEXT_TOKEN` — 动画上下文
+- `ACCESSIBILITY_CONTEXT_TOKEN` — 无障碍上下文
+- `BACKGROUND_CONTEXT_TOKEN` — 背景色上下文
 
-## Exports
+## 导出列表
 
-### Core
+### 核心
 
-| Export                    | Description                                            |
-| ------------------------- | ------------------------------------------------------ |
-| `render`                  | Render application to terminal, returns `RenderResult` |
-| `TerminalRenderer`        | Terminal renderer                                      |
-| `TerminalRendererFactory` | Renderer factory                                       |
+| 导出                      | 说明                                |
+| ------------------------- | ----------------------------------- |
+| `render`                  | 渲染应用到终端，返回 `RenderResult` |
+| `TerminalRenderer`        | 终端渲染器                          |
+| `TerminalRendererFactory` | 渲染器工厂                          |
 
-### Components
+### 组件
 
-| Component                | Description                       |
-| ------------------------ | --------------------------------- |
-| `BoxComponent`           | Flexbox layout container          |
-| `TextComponent`          | Text display with styling support |
-| `NewlineComponent`       | Line break                        |
-| `SpacerComponent`        | Flexible space                    |
-| `StaticComponent`        | Static content rendering          |
-| `TransformComponent`     | Text transformation               |
-| `ErrorOverviewComponent` | Error message display             |
+| 组件                     | 说明               |
+| ------------------------ | ------------------ |
+| `BoxComponent`           | 弹性盒子布局容器   |
+| `TextComponent`          | 文本显示，支持样式 |
+| `NewlineComponent`       | 换行符             |
+| `SpacerComponent`        | 弹性空白           |
+| `StaticComponent`        | 静态内容渲染       |
+| `TransformComponent`     | 文本变换           |
+| `ErrorOverviewComponent` | 错误信息展示       |
 
 ### Hooks
 
-| Hook                       | Return Type                  | Description              |
-| -------------------------- | ---------------------------- | ------------------------ |
-| `useInput`                 | `void`                       | Listen to keyboard input |
-| `useWindowSize`            | `Signal<WindowSize>`         | Terminal window size     |
-| `useAnimation`             | `Signal<AnimationResult>`    | Animation driver         |
-| `useFocus`                 | `Signal<FocusResult>`        | Focus state and control  |
-| `useFocusManager`          | `void`                       | Focus manager            |
-| `useCursor`                | `{ setCursorPosition }`      | Cursor position control  |
-| `useStdin`                 | `Signal<StdinContextValue>`  | stdin access             |
-| `useStdinContext`          | `Signal<StdinContextValue>`  | stdin context            |
-| `useStdout`                | `Signal<StdoutContextValue>` | stdout access            |
-| `useStderr`                | `Signal<StderrContextValue>` | stderr access            |
-| `useApp`                   | `Signal<AppContextValue>`    | Application context      |
-| `usePaste`                 | `void`                       | Paste event              |
-| `useIsScreenReaderEnabled` | `boolean`                    | Screen reader detection  |
-| `useBoxMetrics`            | `Signal<BoxMetrics>`         | Box size information     |
+| Hook                       | 返回类型                     | 说明           |
+| -------------------------- | ---------------------------- | -------------- |
+| `useInput`                 | `void`                       | 监听键盘输入   |
+| `useWindowSize`            | `Signal<WindowSize>`         | 终端窗口尺寸   |
+| `useAnimation`             | `Signal<AnimationResult>`    | 动画驱动       |
+| `useFocus`                 | `Signal<FocusResult>`        | 焦点状态和控制 |
+| `useFocusManager`          | `void`                       | 焦点管理器     |
+| `useCursor`                | `{ setCursorPosition }`      | 光标位置控制   |
+| `useStdin`                 | `Signal<StdinContextValue>`  | stdin 访问     |
+| `useStdinContext`          | `Signal<StdinContextValue>`  | stdin 上下文   |
+| `useStdout`                | `Signal<StdoutContextValue>` | stdout 访问    |
+| `useStderr`                | `Signal<StderrContextValue>` | stderr 访问    |
+| `useApp`                   | `Signal<AppContextValue>`    | 应用上下文     |
+| `usePaste`                 | `void`                       | 粘贴事件       |
+| `useIsScreenReaderEnabled` | `boolean`                    | 屏幕阅读器检测 |
+| `useBoxMetrics`            | `Signal<BoxMetrics>`         | Box 尺寸信息   |
 
-### Utilities
+### 工具
 
-| Export                         | Description                     |
-| ------------------------------ | ------------------------------- |
-| `colorize`                     | ANSI color processing           |
-| `sanitizeAnsi`                 | Clean ANSI escape sequences     |
-| `kittyFlags`, `kittyModifiers` | Kitty keyboard protocol support |
+| 导出                           | 说明               |
+| ------------------------------ | ------------------ |
+| `colorize`                     | ANSI 颜色处理      |
+| `sanitizeAnsi`                 | 清理 ANSI 转义序列 |
+| `kittyFlags`, `kittyModifiers` | Kitty 键盘协议支持 |
 
-## Differences from Ink
+## 与 Ink 的差异
 
-ngx-ink reuses Ink's core logic (ANSI processing, Yoga layout calculation, rendering pipeline), but adapted for Angular:
+ngx-ink 复用 Ink 的核心逻辑（ANSI 处理、Yoga 布局计算、渲染管道），但适配为 Angular：
 
-- Uses Angular components (`@Component`) instead of React function components
-- Uses `input()` / `output()` instead of props
-- Uses Angular Signals for state management
-- Standard Angular application startup method (`bootstrapApplication`)
+- 使用 Angular 组件（`@Component`）而非 React 函数组件
+- 使用 `input()` / `output()` 替代 props
+- 使用 Angular Signals 进行状态管理
+- 标准的 Angular 应用启动方式（`bootstrapApplication`）
 
-## Project Structure
+## 项目结构
 
 ```
 projects/ngx-ink-lib/
 ├── src/
 │   ├── lib/ngx-ink/
 │   │   ├── components/       # Box, Text, Newline, Spacer, Static, Transform, ErrorOverview
-│   │   ├── contexts/         # Angular context Token definitions
-│   │   ├── hooks/            # useInput, useWindowSize, useAnimation, etc.
-│   │   ├── service/          # AppContextService and other services
-│   │   ├── render.ts         # Rendering entry
-│   │   ├── renderer2.ts      # Renderer implementation
-│   │   ├── application.ts    # Angular application startup
-│   │   ├── platform.ts       # Platform provider
-│   │   └── ...              # Core utility functions
-│   └── public-api.ts        # Public API exports
+│   │   ├── contexts/         # Angular 上下文 Token 定义
+│   │   ├── hooks/            # useInput, useWindowSize, useAnimation 等
+│   │   ├── service/          # AppContextService 等服务
+│   │   ├── render.ts         # 渲染入口
+│   │   ├── renderer2.ts      # 渲染器实现
+│   │   ├── application.ts    # Angular 应用启动
+│   │   ├── platform.ts       # Platform 提供器
+│   │   └── ...              # 核心工具函数
+│   └── public-api.ts        # 公共 API 导出
 └── package.json
 ```
