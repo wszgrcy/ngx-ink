@@ -30,6 +30,9 @@ jobs:
             - name: test
               run: |
                   npm run test:lib
+              env:
+                  FORCE_COLOR: true
+                  CI: false
             - name: build
               run: |
                   npm run build:lib
